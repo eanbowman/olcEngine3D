@@ -49,10 +49,14 @@ struct mesh
 			if (line[0] == 'v') {
 				if (line[1] == 't') {
 					vec2d v;
-					s >> junk >> v.u >> v.v;
+					s >> junk >> junk >> v.u >> v.v;
+					// A little hack for the spyro texture
+					v.u = 1.0f - v.u;
+					v.v = 1.0f - v.v;
 					texs.push_back(v);
 				}
-				else {
+				else
+				{
 					vec3d v;
 					s >> junk >> v.x >> v.y >> v.z;
 					verts.push_back(v);
@@ -654,7 +658,7 @@ public:
 		meshCube.LoadFromObjectFile("Artisan Home1.obj", true);
 
 		// Load a sprite!
-		sprTex1 = new olcSprite(L"mariokart.spr");
+		sprTex1 = new olcSprite(L"sky1.spr");
 
 		// Projection Matrix
 		matProj = Matrix_MakeProjection(90.0f, (float)ScreenHeight() / (float)ScreenWidth(), 0.1f, 1000.0f);
@@ -876,14 +880,14 @@ public:
 			// Draw the transformed, viewed, clipped, projected, sorted, clipped triangles
 			for (auto &t : listTriangles)
 			{
+				//FillTriangle(t.p[0].x, t.p[0].y, t.p[1].x, t.p[1].y, t.p[2].x, t.p[2].y, t.sym, t.col);
+
 				TexturedTriangle(
 					t.p[0].x, t.p[0].y, t.t[0].u, t.t[0].v, t.t[0].w,
 					t.p[1].x, t.p[1].y, t.t[1].u, t.t[1].v, t.t[1].w,
 					t.p[2].x, t.p[2].y, t.t[2].u, t.t[2].v, t.t[2].w,
-					sprTex1
-				);
-				//FillTriangle(t.p[0].x, t.p[0].y, t.p[1].x, t.p[1].y, t.p[2].x, t.p[2].y, t.sym, t.col);
-				DrawTriangle(t.p[0].x, t.p[0].y, t.p[1].x, t.p[1].y, t.p[2].x, t.p[2].y, PIXEL_SOLID, FG_GREY);
+					sprTex1);
+				//DrawTriangle(t.p[0].x, t.p[0].y, t.p[1].x, t.p[1].y, t.p[2].x, t.p[2].y, PIXEL_SOLID, FG_GREY);
 			}
 		}
 
@@ -897,7 +901,7 @@ public:
 int main()
 {
 	olcEngine3D demo;
-	if (demo.ConstructConsole(256, 240, 4, 4))
+	if (demo.ConstructConsole(256, 240, 3, 3))
 		demo.Start();
 	return 0;
 }
