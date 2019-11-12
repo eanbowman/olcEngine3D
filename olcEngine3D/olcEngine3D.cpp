@@ -409,9 +409,9 @@ private:
 
 
 	void TexturedTriangle(
-		int x1, int y1, float u1, float v1,
-		int x2, int y2, float u2, float v2,
-		int x3, int y3, float u3, float v3,
+		int x1, int y1, float u1, float v1, float w1,
+		int x2, int y2, float u2, float v2, float w2,
+		int x3, int y3, float u3, float v3, float w3,
 		olcSprite *tex) {
 		// Sort by y position
 		if (y2 < y1)
@@ -420,7 +420,7 @@ private:
 			swap(x1, x2);
 			swap(u1, u2);
 			swap(v1, v2);
-			//swap(w1, w2);
+			swap(w1, w2);
 		}
 
 		if (y3 < y1)
@@ -429,7 +429,7 @@ private:
 			swap(x1, x3);
 			swap(u1, u3);
 			swap(v1, v3);
-			//swap(w1, w3);
+			swap(w1, w3);
 		}
 
 		if (y3 < y2)
@@ -438,20 +438,20 @@ private:
 			swap(x2, x3);
 			swap(u2, u3);
 			swap(v2, v3);
-			//swap(w2, w3);
+			swap(w2, w3);
 		}
 
 		int dy1 = y2 - y1;
 		int dx1 = x2 - x1;
 		float dv1 = v2 - v1;
 		float du1 = u2 - u1;
-		//float dw1 = w2 - w1;
+		float dw1 = w2 - w1;
 
 		int dy2 = y3 - y1;
 		int dx2 = x3 - x1;
 		float dv2 = v3 - v1;
 		float du2 = u3 - u1;
-		//float dw2 = w3 - w1;
+		float dw2 = w3 - w1;
 
 		float tex_u, tex_v, tex_w;
 
@@ -465,11 +465,11 @@ private:
 
 		if (dy1) du1_step = du1 / (float)abs(dy1);
 		if (dy1) dv1_step = dv1 / (float)abs(dy1);
-		//if (dy1) dw1_step = dw1 / (float)abs(dy1);
+		if (dy1) dw1_step = dw1 / (float)abs(dy1);
 
 		if (dy2) du2_step = du2 / (float)abs(dy2);
 		if (dy2) dv2_step = dv2 / (float)abs(dy2);
-		//if (dy2) dw2_step = dw2 / (float)abs(dy2);
+		if (dy2) dw2_step = dw2 / (float)abs(dy2);
 
 		// Draw the top triangle half (if it's not flat)
 		if (dy1) {
@@ -479,24 +479,24 @@ private:
 
 				float tex_su = u1 + (float)(i - y1) * du1_step;
 				float tex_sv = v1 + (float)(i - y1) * dv1_step;
-				//float tex_sw = w1 + (float)(i - y1) * dw1_step;
+				float tex_sw = w1 + (float)(i - y1) * dw1_step;
 
 				float tex_eu = u1 + (float)(i - y1) * du2_step;
 				float tex_ev = v1 + (float)(i - y1) * dv2_step;
-				//float tex_ew = w1 + (float)(i - y1) * dw2_step;
+				float tex_ew = w1 + (float)(i - y1) * dw2_step;
 
 				// sort by x
 				if (ax > bx) {
 					swap(ax, bx);
 					swap(tex_su, tex_eu);
 					swap(tex_sv, tex_ev);
-					//swap(tex_sw, tex_ew);
+					swap(tex_sw, tex_ew);
 				}
 
 				// Set texture location at start
 				tex_u = tex_su;
 				tex_v = tex_sv;
-				//tex_w = tex_sw;
+				tex_w = tex_sw;
 
 				// calculate texture stepping ( 1 / number of pixes in scanline )
 				float tstep = 1.0f / ((float)(bx - ax));
@@ -505,7 +505,8 @@ private:
 				for (int j = ax; j < bx; j++) {
 					tex_u = (1.0f - t) * tex_su + t * tex_eu;
 					tex_v = (1.0f - t) * tex_sv + t * tex_ev;
-					Draw(j, i, tex->SampleGlyph(tex_u, tex_v), tex->SampleColour(tex_u, tex_v));
+					tex_w = (1.0f - t) * tex_sw + t * tex_ew;
+					Draw(j, i, tex->SampleGlyph(tex_u / tex_w, tex_v / tex_w), tex->SampleColour(tex_u / tex_w, tex_v / tex_w));
 					t += tstep;
 				}
 			}
@@ -516,44 +517,55 @@ private:
 		dx1 = x3 - x2;
 		dv1 = v3 - v2;
 		du1 = u3 - u2;
+		dw1 = w3 - w2;
 
 		// Calculate step change
 		if (dy1) dax_step = dx1 / (float)abs(dy1);
 		if (dy2) dbx_step = dx2 / (float)abs(dy2);
+
 		du1_step = 0, dv1_step = 0;
 		if (dy1) du1_step = du1 / (float)abs(dy1);
 		if (dy1) dv1_step = dv1 / (float)abs(dy1);
+		if (dy1) dw1_step = dw1 / (float)abs(dy1);
 
-		for (int i = y2; i <= y3; i++) {
-			int ax = x2 + (float)(i - y2) * dax_step;
-			int bx = x1 + (float)(i - y1) * dbx_step;
+		if (dy1)
+		{
+			for (int i = y2; i <= y3; i++)
+			{
+				int ax = x2 + (float)(i - y2) * dax_step;
+				int bx = x1 + (float)(i - y1) * dbx_step;
 
-			float tex_su = u2 + (float)(i - y2) * du1_step;
-			float tex_sv = v2 + (float)(i - y2) * dv1_step;
+				float tex_su = u2 + (float)(i - y2) * du1_step;
+				float tex_sv = v2 + (float)(i - y2) * dv1_step;
+				float tex_sw = w2 + (float)(i - y2) * dw1_step;
 
-			float tex_eu = u1 + (float)(i - y1) * du2_step;
-			float tex_ev = v1 + (float)(i - y1) * dv2_step;
+				float tex_eu = u1 + (float)(i - y1) * du2_step;
+				float tex_ev = v1 + (float)(i - y1) * dv2_step;
+				float tex_ew = w1 + (float)(i - y1) * dw2_step;
 
-			// sort by x
-			if (ax > bx) {
-				swap(ax, bx);
-				swap(tex_su, tex_eu);
-				swap(tex_sv, tex_ev);
-			}
+				if (ax > bx)
+				{
+					swap(ax, bx);
+					swap(tex_su, tex_eu);
+					swap(tex_sv, tex_ev);
+					swap(tex_sw, tex_ew);
+				}
 
-			// Set texture location at start
-			tex_u = tex_su;
-			tex_v = tex_sv;
+				tex_u = tex_su;
+				tex_v = tex_sv;
+				tex_w = tex_sw;
 
-			// calculate texture stepping ( 1 / number of pixes in scanline )
-			float tstep = 1.0f / ((float)(bx - ax));
-			float t = 0.0f;
+				float tstep = 1.0f / ((float)(bx - ax));
+				float t = 0.0f;
 
-			for (int j = ax; j < bx; j++) {
-				tex_u = (1.0f - t) * tex_su + t * tex_eu;
-				tex_v = (1.0f - t) * tex_sv + t * tex_ev;
-				Draw(j, i, tex->SampleGlyph(tex_u, tex_v), tex->SampleColour(tex_u, tex_v));
-				t += tstep;
+				for (int j = ax; j < bx; j++)
+				{
+					tex_u = (1.0f - t) * tex_su + t * tex_eu;
+					tex_v = (1.0f - t) * tex_sv + t * tex_ev;
+					tex_w = (1.0f - t) * tex_sw + t * tex_ew;
+					Draw(j, i, tex->SampleGlyph(tex_u / tex_w, tex_v / tex_w), tex->SampleColour(tex_u / tex_w, tex_v / tex_w));
+					t += tstep;
+				}
 			}
 		}
 	}
@@ -628,7 +640,7 @@ public:
 
 		// Set up rotation matrices
 		mat4x4 matRotZ, matRotX;
-		//fTheta += 1.0f * fElapsedTime;
+		fTheta += 1.0f * fElapsedTime;
 
 		matRotZ = Matrix_MakeRotationZ(fTheta * 0.5f);
 		matRotX = Matrix_MakeRotationX(fTheta);
@@ -730,6 +742,19 @@ public:
 					triProjected.t[1] = clipped[n].t[1];
 					triProjected.t[2] = clipped[n].t[2];
 
+					// Project texture as well from 2D --> 3D
+					triProjected.t[0].u = triProjected.t[0].u / triProjected.p[0].w;
+					triProjected.t[1].u = triProjected.t[1].u / triProjected.p[1].w;
+					triProjected.t[2].u = triProjected.t[2].u / triProjected.p[2].w;
+					triProjected.t[0].v = triProjected.t[0].v / triProjected.p[0].w;
+					triProjected.t[1].v = triProjected.t[1].v / triProjected.p[1].w;
+					triProjected.t[2].v = triProjected.t[2].v / triProjected.p[2].w;
+
+					// Update w component of texture co-ordinate
+					triProjected.t[0].w = 1.0f / triProjected.p[0].w;
+					triProjected.t[1].w = 1.0f / triProjected.p[1].w;
+					triProjected.t[2].w = 1.0f / triProjected.p[2].w;
+
 					// Normalising the view into cartesian space
 					triProjected.p[0] = Vector_Div(triProjected.p[0], triProjected.p[0].w);
 					triProjected.p[1] = Vector_Div(triProjected.p[1], triProjected.p[1].w);
@@ -799,9 +824,9 @@ public:
 			for (auto &t : listTriangles)
 			{
 				TexturedTriangle(
-					t.p[0].x, t.p[0].y, t.t[0].u, t.t[0].v,
-					t.p[1].x, t.p[1].y, t.t[1].u, t.t[1].v,
-					t.p[2].x, t.p[2].y, t.t[2].u, t.t[2].v,
+					t.p[0].x, t.p[0].y, t.t[0].u, t.t[0].v, t.t[0].w,
+					t.p[1].x, t.p[1].y, t.t[1].u, t.t[1].v, t.t[1].w,
+					t.p[2].x, t.p[2].y, t.t[2].u, t.t[2].v, t.t[2].w,
 					sprTex1
 				);
 				//FillTriangle(t.p[0].x, t.p[0].y, t.p[1].x, t.p[1].y, t.p[2].x, t.p[2].y, t.sym, t.col);
