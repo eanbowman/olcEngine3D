@@ -1,4 +1,4 @@
-#include "olcConsoleGameEngineGL.h"
+#include "olcConsoleGameEngine.h"
 #include <fstream>
 #include <strstream>
 #include <algorithm>
