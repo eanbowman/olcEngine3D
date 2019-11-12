@@ -328,8 +328,8 @@ private:
 			out_tri1.t[1].v = t * (outside_tex[0]->v - inside_tex[0]->v) + inside_tex[0]->v;
 
 			out_tri1.p[2] = Vector_IntersectPlane(plane_p, plane_n, *inside_points[0], *outside_points[1], t);
-			out_tri1.t[2].u = t * (outside_tex[0]->u - inside_tex[0]->u) + inside_tex[0]->u;
-			out_tri1.t[2].v = t * (outside_tex[0]->v - inside_tex[0]->v) + inside_tex[0]->v;
+			out_tri1.t[2].u = t * (outside_tex[1]->u - inside_tex[0]->u) + inside_tex[0]->u;
+			out_tri1.t[2].v = t * (outside_tex[1]->v - inside_tex[0]->v) + inside_tex[0]->v;
 
 
 			return 1; // Return the newly formed single triangle
@@ -351,19 +351,26 @@ private:
 			// The first triangle consists of the two inside points and a new
 			// point determined by the location where one side of the triangle
 			// intersects with the plane
-			float t;
 			out_tri1.p[0] = *inside_points[0];
 			out_tri1.p[1] = *inside_points[1];
 			out_tri1.t[0] = *inside_tex[0];
 			out_tri1.t[1] = *inside_tex[1];
+
+			float t;
 			out_tri1.p[2] = Vector_IntersectPlane(plane_p, plane_n, *inside_points[0], *outside_points[0], t);
+			out_tri1.t[2].u = t * (outside_tex[0]->u - inside_tex[0]->u) + inside_tex[0]->u;
+			out_tri1.t[2].v = t * (outside_tex[0]->v - inside_tex[0]->v) + inside_tex[0]->v;
 
 			// The second triangle is composed of one of he inside points, a
 			// new point determined by the intersection of the other side of the 
 			// triangle and the plane, and the newly created point above
 			out_tri2.p[0] = *inside_points[1];
+			out_tri2.t[0] = *inside_tex[1];
 			out_tri2.p[1] = out_tri1.p[2];
+			out_tri2.t[1] = out_tri1.t[2];
 			out_tri2.p[2] = Vector_IntersectPlane(plane_p, plane_n, *inside_points[1], *outside_points[0], t);
+			out_tri2.t[2].u = t * (outside_tex[0]->u - inside_tex[1]->u) + inside_tex[1]->u;
+			out_tri2.t[2].v = t * (outside_tex[0]->v - inside_tex[1]->v) + inside_tex[1]->v;
 
 			return 2; // Return two newly formed triangles which form a quad
 		}
@@ -407,48 +414,62 @@ private:
 		int x3, int y3, float u3, float v3,
 		olcSprite *tex) {
 		// Sort by y position
-		if (y2 < y1) {
+		if (y2 < y1)
+		{
 			swap(y1, y2);
 			swap(x1, x2);
 			swap(u1, u2);
 			swap(v1, v2);
+			//swap(w1, w2);
 		}
-		if (y3 < y1) {
+
+		if (y3 < y1)
+		{
+			swap(y1, y3);
 			swap(x1, x3);
 			swap(u1, u3);
 			swap(v1, v3);
-			swap(y1, y3);
+			//swap(w1, w3);
 		}
-		if (y3 < y2) {
+
+		if (y3 < y2)
+		{
+			swap(y2, y3);
 			swap(x2, x3);
 			swap(u2, u3);
 			swap(v2, v3);
-			swap(y2, y3);
+			//swap(w2, w3);
 		}
 
 		int dy1 = y2 - y1;
 		int dx1 = x2 - x1;
 		float dv1 = v2 - v1;
 		float du1 = u2 - u1;
+		//float dw1 = w2 - w1;
 
 		int dy2 = y3 - y1;
 		int dx2 = x3 - x1;
 		float dv2 = v3 - v1;
 		float du2 = u3 - u1;
+		//float dw2 = w3 - w1;
 
-		float tex_u, tex_v;
+		float tex_u, tex_v, tex_w;
 
 		float dax_step = 0, dbx_step = 0,
 			du1_step = 0, dv1_step = 0,
-			du2_step = 0, dv2_step = 0;
+			du2_step = 0, dv2_step = 0,
+			dw1_step = 0, dw2_step = 0;
 
 		if (dy1) dax_step = dx1 / (float)abs(dy1);
 		if (dy2) dbx_step = dx2 / (float)abs(dy2);
 
 		if (dy1) du1_step = du1 / (float)abs(dy1);
-		if (dy1) dv1_step = du1 / (float)abs(dy1);
+		if (dy1) dv1_step = dv1 / (float)abs(dy1);
+		//if (dy1) dw1_step = dw1 / (float)abs(dy1);
+
 		if (dy2) du2_step = du2 / (float)abs(dy2);
-		if (dy2) dv2_step = du2 / (float)abs(dy2);
+		if (dy2) dv2_step = dv2 / (float)abs(dy2);
+		//if (dy2) dw2_step = dw2 / (float)abs(dy2);
 
 		// Draw the top triangle half (if it's not flat)
 		if (dy1) {
@@ -458,20 +479,24 @@ private:
 
 				float tex_su = u1 + (float)(i - y1) * du1_step;
 				float tex_sv = v1 + (float)(i - y1) * dv1_step;
+				//float tex_sw = w1 + (float)(i - y1) * dw1_step;
 
 				float tex_eu = u1 + (float)(i - y1) * du2_step;
 				float tex_ev = v1 + (float)(i - y1) * dv2_step;
+				//float tex_ew = w1 + (float)(i - y1) * dw2_step;
 
 				// sort by x
 				if (ax > bx) {
 					swap(ax, bx);
 					swap(tex_su, tex_eu);
 					swap(tex_sv, tex_ev);
+					//swap(tex_sw, tex_ew);
 				}
 
 				// Set texture location at start
 				tex_u = tex_su;
 				tex_v = tex_sv;
+				//tex_w = tex_sw;
 
 				// calculate texture stepping ( 1 / number of pixes in scanline )
 				float tstep = 1.0f / ((float)(bx - ax));
@@ -495,9 +520,9 @@ private:
 		// Calculate step change
 		if (dy1) dax_step = dx1 / (float)abs(dy1);
 		if (dy2) dbx_step = dx2 / (float)abs(dy2);
-		du1_step = 0; dv1_step = 0;
+		du1_step = 0, dv1_step = 0;
 		if (dy1) du1_step = du1 / (float)abs(dy1);
-		if (dy1) dv1_step = du1 / (float)abs(dy1);
+		if (dy1) dv1_step = dv1 / (float)abs(dy1);
 
 		for (int i = y2; i <= y3; i++) {
 			int ax = x2 + (float)(i - y2) * dax_step;
@@ -567,7 +592,7 @@ public:
 		};
 
 		// Load a sprite!
-		sprTex1 = new olcSprite(L"minijario.spr");
+		sprTex1 = new olcSprite(L"mariokart.spr");
 
 		// Projection Matrix
 		matProj = Matrix_MakeProjection(90.0f, (float)ScreenHeight() / (float)ScreenWidth(), 0.1f, 1000.0f);
