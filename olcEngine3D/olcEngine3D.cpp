@@ -688,6 +688,10 @@ public:
 			fYaw -= 2.0f * fElapsedTime;
 		if (GetKey(L'D').bHeld)
 			fYaw += 2.0f * fElapsedTime;
+
+		if (GetKey(VK_ESCAPE).bReleased) {
+			exit(true);
+		}
 		
 		// Clear Screen
 		Fill(0, 0, ScreenWidth(), ScreenHeight(), PIXEL_SOLID, FG_BLACK);
