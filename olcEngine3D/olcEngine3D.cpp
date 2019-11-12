@@ -81,19 +81,6 @@ private:
 
 	float fTheta;
 
-	//void MultiplyMatrixVector(vec3d &i, vec3d &o, mat4x4 &m)
-	//{
-	//	o.x = i.x * m.m[0][0] + i.y * m.m[1][0] + i.z * m.m[2][0] + m.m[3][0];
-	//	o.y = i.x * m.m[0][1] + i.y * m.m[1][1] + i.z * m.m[2][1] + m.m[3][1];
-	//	o.z = i.x * m.m[0][2] + i.y * m.m[1][2] + i.z * m.m[2][2] + m.m[3][2];
-	//	float w = i.x * m.m[0][3] + i.y * m.m[1][3] + i.z * m.m[2][3] + m.m[3][3];
-
-	//	if (w != 0.0f)
-	//	{
-	//		o.x /= w; o.y /= w; o.z /= w;
-	//	}
-	//}
-
 	vec3d Matrix_MultiplyVector(mat4x4 &m, vec3d &i) {
 		vec3d v;
 		v.x = i.x * m.m[0][0] + i.y * m.m[1][0] + i.z * m.m[2][0] + i.w * m.m[3][0];
@@ -395,7 +382,7 @@ public:
 	bool OnUserCreate() override
 	{
 
-		meshCube.LoadFromObjectFile("Room.obj");
+		meshCube.LoadFromObjectFile("mountains.obj");
 
 		// Projection Matrix
 		matProj = Matrix_MakeProjection(90.0f, (float)ScreenHeight() / (float)ScreenWidth(), 0.1f, 1000.0f);
@@ -407,13 +394,13 @@ public:
 	{
 		// User input
 		if (GetKey(VK_UP).bHeld)
-			vCamera.y -= 8.0f * fElapsedTime;
-		if (GetKey(VK_DOWN).bHeld)
 			vCamera.y += 8.0f * fElapsedTime;
+		if (GetKey(VK_DOWN).bHeld)
+			vCamera.y -= 8.0f * fElapsedTime;
 		if (GetKey(VK_LEFT).bHeld)
-			vCamera.x -= 8.0f * fElapsedTime;
-		if (GetKey(VK_RIGHT).bHeld)
 			vCamera.x += 8.0f * fElapsedTime;
+		if (GetKey(VK_RIGHT).bHeld)
+			vCamera.x -= 8.0f * fElapsedTime;
 
 		vec3d vForward = Vector_Mul(vLookDir, 8.0f * fElapsedTime);
 		if (GetKey(L'W').bHeld)
@@ -422,9 +409,9 @@ public:
 			vCamera = Vector_Sub(vCamera, vForward);
 
 		if (GetKey(L'A').bHeld)
-			fYaw += 2.0f * fElapsedTime;
-		if (GetKey(L'D').bHeld)
 			fYaw -= 2.0f * fElapsedTime;
+		if (GetKey(L'D').bHeld)
+			fYaw += 2.0f * fElapsedTime;
 		
 		// Clear Screen
 		Fill(0, 0, ScreenWidth(), ScreenHeight(), PIXEL_SOLID, FG_BLACK);
@@ -445,7 +432,7 @@ public:
 		matWorld = Matrix_MultiplyMatrix(matWorld, matTrans);
 
 		vec3d vUp = { 0, 1, 0 };
-		vec3d vTarget = { 0,0,1 };
+		vec3d vTarget = { 0, 0, 1 };
 		mat4x4 matCameraRot = Matrix_MakeRotationY(fYaw);
 		vLookDir = Matrix_MultiplyVector(matCameraRot, vTarget);
 		vTarget = Vector_Add(vCamera, vLookDir);
@@ -480,10 +467,8 @@ public:
 			// Must normalize normal to 1.0f
 			normal = Vector_Normalise(normal);
 
-			// Normalize normal
-			float l = sqrt(normal.x*normal.x + normal.y*normal.y + normal.z*normal.z);
-
 			vec3d vCameraRay = Vector_Sub(triTransformed.p[0], vCamera);
+
 			if(Vector_DotProduct(normal, vCameraRay) < 0.0f) {
 				// Illumination
 				vec3d light_direction = { 0.0f, 1.0f, -1.0f };
@@ -501,6 +486,8 @@ public:
 				triViewed.p[0] = Matrix_MultiplyVector(matView, triTransformed.p[0]);
 				triViewed.p[1] = Matrix_MultiplyVector(matView, triTransformed.p[1]);
 				triViewed.p[2] = Matrix_MultiplyVector(matView, triTransformed.p[2]);
+				triViewed.sym = triTransformed.sym;
+				triViewed.col = triTransformed.col;
 
 				// clip viewed triangles against the near plane
 				int nClippedTriangles = 0;
@@ -519,13 +506,21 @@ public:
 					triProjected.p[0] = Matrix_MultiplyVector(matProj, clipped[n].p[0]);
 					triProjected.p[1] = Matrix_MultiplyVector(matProj, clipped[n].p[1]);
 					triProjected.p[2] = Matrix_MultiplyVector(matProj, clipped[n].p[2]);
-					triProjected.col = triTransformed.col;
-					triProjected.sym = triTransformed.sym;
+					triProjected.col = clipped[n].col;
+					triProjected.sym = clipped[n].sym;
 
 					// Normalising the view into cartesian space
 					triProjected.p[0] = Vector_Div(triProjected.p[0], triProjected.p[0].w);
 					triProjected.p[1] = Vector_Div(triProjected.p[1], triProjected.p[1].w);
 					triProjected.p[2] = Vector_Div(triProjected.p[2], triProjected.p[2].w);
+
+					// Fix inverted x/y
+					triProjected.p[0].x *= -1.0f;
+					triProjected.p[1].x *= -1.0f;
+					triProjected.p[2].x *= -1.0f;
+					triProjected.p[0].y *= -1.0f;
+					triProjected.p[1].y *= -1.0f;
+					triProjected.p[2].y *= -1.0f;
 
 					// Scale into view
 					vec3d vOffsetView = { 1, 1, 0 };
