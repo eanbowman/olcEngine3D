@@ -699,9 +699,9 @@ public:
 				short c = 0;
 				int pixel;
 				// position times the 4 elements of each pixel
-				pixel = image[ x * y * 4 ] * 0x010000; // red
-				pixel += image[ x * y * 4 + 1 ] * 0x000100; // green
-				pixel += image[ x * y * 4 + 2 ] * 0x000001; // blue
+				pixel = image[ x + (y * 4) ] * 0x010000; // red
+				pixel += image[ x + (y * 4) + 1 ] * 0x000100; // green
+				pixel += image[ x + (y * 4) + 2 ] * 0x000001; // blue
 				//pixel += image[x*y + 3]; // alpha not used but here anyway
 
 				// Check which colour in the console is closest
@@ -953,24 +953,6 @@ public:
 					t.p[2].x, t.p[2].y, t.t[2].u, t.t[2].v, t.t[2].w,
 					sprTex1);
 				//DrawTriangle(t.p[0].x, t.p[0].y, t.p[1].x, t.p[1].y, t.p[2].x, t.p[2].y, PIXEL_SOLID, FG_GREY);
-
-				// Draw colours out to debug
-				Draw(1, 1, PIXEL_SOLID, FG_BLACK);
-				Draw(1, 2, PIXEL_SOLID, FG_DARK_BLUE);
-				Draw(1, 3, PIXEL_SOLID, FG_DARK_GREEN);
-				Draw(1, 4, PIXEL_SOLID, FG_DARK_CYAN);
-				Draw(1, 5, PIXEL_SOLID, FG_DARK_RED);
-				Draw(1, 6, PIXEL_SOLID, FG_DARK_MAGENTA);
-				Draw(1, 7, PIXEL_SOLID, FG_DARK_YELLOW);
-				Draw(1, 8, PIXEL_SOLID, FG_GREY);
-				Draw(1, 9, PIXEL_SOLID, FG_DARK_GREY);
-				Draw(1, 10, PIXEL_SOLID, FG_BLUE);
-				Draw(1, 11, PIXEL_SOLID, FG_GREEN);
-				Draw(1, 12, PIXEL_SOLID, FG_CYAN);
-				Draw(1, 13, PIXEL_SOLID, FG_RED);
-				Draw(1, 14, PIXEL_SOLID, FG_MAGENTA);
-				Draw(1, 15, PIXEL_SOLID, FG_YELLOW);
-				Draw(1, 16, PIXEL_SOLID, FG_WHITE);
 			}
 		}
 
