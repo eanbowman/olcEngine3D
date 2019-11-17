@@ -18,12 +18,18 @@
     <ClCompile Include="olcEngine3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="lodepng.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="olcConsoleGameEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="olcConsoleGameEngineGL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lodepng.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

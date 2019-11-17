@@ -1,4 +1,5 @@
-#include "olcConsoleGameEngine.h"
+#include "olcConsoleGameEngineGL.h"
+#include "lodepng.h"
 #include <fstream>
 #include <strstream>
 #include <algorithm>
@@ -657,8 +658,19 @@ public:
 		// Load model
 		meshCube.LoadFromObjectFile("Artisan Home1.obj", true);
 
-		// Load a sprite!
-		sprTex1 = new olcSprite(L"sky1.spr");
+		// Load a sprite from PNG using lodepng
+		std::vector<unsigned char> png;
+		std::vector<unsigned char> image; //the raw pixels
+		unsigned width, height;
+
+		sprTex1 = new olcSprite(width, height);
+
+		//load and decode
+		unsigned error = lodepng::load_file(png, "artisanstextures64.png");
+		if (!error) error = lodepng::decode(image, width, height, png);
+
+		//if there's an error, display it
+		if (error) std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
 
 		// Projection Matrix
 		matProj = Matrix_MakeProjection(90.0f, (float)ScreenHeight() / (float)ScreenWidth(), 0.1f, 1000.0f);
