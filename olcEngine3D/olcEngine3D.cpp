@@ -708,7 +708,7 @@ public:
 				// by looping through all of the colours and
 				// calculating a difference
 				int minDiff = 0xffffff; // max difference!
-				for (int i = 0; i < sizeof(colours); i++) {
+				for (int i = 0; i < 16; i++) {
 					int currentDiff =  abs(pixel - colours[i]);
 					if (currentDiff < minDiff) {
 						c = i;
