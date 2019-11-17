@@ -663,14 +663,63 @@ public:
 		std::vector<unsigned char> image; //the raw pixels
 		unsigned width, height;
 
-		sprTex1 = new olcSprite(width, height);
-
 		//load and decode
 		unsigned error = lodepng::load_file(png, "artisanstextures64.png");
 		if (!error) error = lodepng::decode(image, width, height, png);
 
 		//if there's an error, display it
 		if (error) std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+
+		// set up olcSprite based on loaded image
+		sprTex1 = new olcSprite(width, height);
+
+		//the pixels are now in the vector "image", 4 bytes per pixel, ordered RGBARGBA..., use it as texture, draw it, ...
+
+		// Go through each pixel and assign it a character and colour in the olcGameEngine
+		int colours[16] = {
+			0x000000, // BLACK
+			0x000080, // DARK BLUE
+			0x008000, // DARK GREEN
+			0x008080, // DARK CYAN
+			0x800000, // DARK RED
+			0x800080, // DARK MAGENTA
+			0x808000, // DARK YELLOW
+			0xc0c0c0, // GREY
+			0x808080, // DARK GREY
+			0x0000ff, // BLUE
+			0x00ff00, // GREEN
+			0x00ffff, // CYAN
+			0xff0000, // RED
+			0xff00ff, // MAGENTA
+			0xffff00, // YELLOW
+			0xffffff, // WHITE
+		};
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				short c = 0;
+				int pixel;
+				// position times the 4 elements of each pixel
+				pixel = image[ x * y * 4 ] * 0x010000; // red
+				pixel += image[ x * y * 4 + 1 ] * 0x000100; // green
+				pixel += image[ x * y * 4 + 2 ] * 0x000001; // blue
+				//pixel += image[x*y + 3]; // alpha not used but here anyway
+
+				// Check which colour in the console is closest
+				// by looping through all of the colours and
+				// calculating a difference
+				int minDiff = 0xffffff; // max difference!
+				for (int i = 0; i < sizeof(colours); i++) {
+					int currentDiff = colours[i] - pixel;
+					if (currentDiff < minDiff) {
+						c = i;
+						minDiff = currentDiff;
+					}
+				}
+
+				sprTex1->SetColour(x, y, c);
+				sprTex1->SetGlyph(x, y, PIXEL_SOLID);
+			}
+		}
 
 		// Projection Matrix
 		matProj = Matrix_MakeProjection(90.0f, (float)ScreenHeight() / (float)ScreenWidth(), 0.1f, 1000.0f);
@@ -904,6 +953,24 @@ public:
 					t.p[2].x, t.p[2].y, t.t[2].u, t.t[2].v, t.t[2].w,
 					sprTex1);
 				//DrawTriangle(t.p[0].x, t.p[0].y, t.p[1].x, t.p[1].y, t.p[2].x, t.p[2].y, PIXEL_SOLID, FG_GREY);
+
+				// Draw colours out to debug
+				Draw(1, 1, PIXEL_SOLID, FG_BLACK);
+				Draw(1, 2, PIXEL_SOLID, FG_DARK_BLUE);
+				Draw(1, 3, PIXEL_SOLID, FG_DARK_GREEN);
+				Draw(1, 4, PIXEL_SOLID, FG_DARK_CYAN);
+				Draw(1, 5, PIXEL_SOLID, FG_DARK_RED);
+				Draw(1, 6, PIXEL_SOLID, FG_DARK_MAGENTA);
+				Draw(1, 7, PIXEL_SOLID, FG_DARK_YELLOW);
+				Draw(1, 8, PIXEL_SOLID, FG_GREY);
+				Draw(1, 9, PIXEL_SOLID, FG_DARK_GREY);
+				Draw(1, 10, PIXEL_SOLID, FG_BLUE);
+				Draw(1, 11, PIXEL_SOLID, FG_GREEN);
+				Draw(1, 12, PIXEL_SOLID, FG_CYAN);
+				Draw(1, 13, PIXEL_SOLID, FG_RED);
+				Draw(1, 14, PIXEL_SOLID, FG_MAGENTA);
+				Draw(1, 15, PIXEL_SOLID, FG_YELLOW);
+				Draw(1, 16, PIXEL_SOLID, FG_WHITE);
 			}
 		}
 
