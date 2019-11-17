@@ -664,7 +664,7 @@ public:
 		unsigned width, height;
 
 		//load and decode
-		unsigned error = lodepng::load_file(png, "artisanstextures64.png");
+		unsigned error = lodepng::load_file(png, "circle.png");
 		if (!error) error = lodepng::decode(image, width, height, png);
 
 		//if there's an error, display it
