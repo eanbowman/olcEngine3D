@@ -709,7 +709,7 @@ public:
 				// calculating a difference
 				int minDiff = 0xffffff; // max difference!
 				for (int i = 0; i < sizeof(colours); i++) {
-					int currentDiff =  pixel - colours[i];
+					int currentDiff =  abs(pixel - colours[i]);
 					if (currentDiff < minDiff) {
 						c = i;
 						minDiff = currentDiff;
