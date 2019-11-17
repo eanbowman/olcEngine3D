@@ -697,13 +697,17 @@ public:
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				short c = 0;
-				int pixel;
+				int pixel = 0;
+				short red = 0; short green = 0; short blue = 0; short alpha = 0;
 				// position times the 4 elements of each pixel
-				pixel = image[ x + (y * 4) ] * 0x010000; // red
-				pixel += image[ x + (y * 4) + 1 ] * 0x000100; // green
-				pixel += image[ x + (y * 4) + 2 ] * 0x000001; // blue
-				//pixel += image[x*y + 3]; // alpha not used but here anyway
-
+				red = image[ x + (y * 4) ]; // red
+				green += image[ x + (y * 4) + 1 ]; // green
+				blue += image[x + (y * 4) + 2]; // blue
+				alpha += image[x + (y * 4) + 3]; // alpha not used but here anyway
+				pixel = red << 16;
+				pixel += green << 8;
+				pixel += blue;
+				
 				// Check which colour in the console is closest
 				// by looping through all of the colours and
 				// calculating a difference
