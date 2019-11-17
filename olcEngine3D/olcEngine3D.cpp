@@ -627,33 +627,33 @@ public:
 		// Create Depth Buffer
 		pDepthBuffer = new float[ScreenWidth() * ScreenHeight()];
 
-		//meshCube.tris = {
+		meshCube.tris = {
 
-		//	// SOUTH
-		//	{ 0.0f, 0.0f, 0.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 1.0f,},
-		//	{ 0.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		1.0f, 0.0f, 1.0f,		1.0f, 1.0f, 1.0f,},
+			// SOUTH
+			{ 0.0f, 0.0f, 0.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 1.0f,},
+			{ 0.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		1.0f, 0.0f, 1.0f,		1.0f, 1.0f, 1.0f,},
 
-		//	// EAST           																			   
-		//	{ 1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,		0.0f, 1.0f, 1.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 1.0f,},
-		//	{ 1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 1.0f, 1.0f,		0.0f, 1.0f, 1.0f,		1.0f, 0.0f, 1.0f,		1.0f, 1.0f, 1.0f,},
+			// EAST           																			   
+			{ 1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,		0.0f, 1.0f, 1.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 1.0f,},
+			{ 1.0f, 0.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 0.0f, 1.0f, 1.0f,		0.0f, 1.0f, 1.0f,		1.0f, 0.0f, 1.0f,		1.0f, 1.0f, 1.0f,},
 
-		//	// NORTH           																			   
-		//	{ 1.0f, 0.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,		0.0f, 1.0f, 1.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 1.0f,},
-		//	{ 1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,		0.0f, 1.0f, 1.0f,		1.0f, 0.0f, 1.0f,		1.0f, 1.0f, 1.0f,},
+			// NORTH           																			   
+			{ 1.0f, 0.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,		0.0f, 1.0f, 1.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 1.0f,},
+			{ 1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,		0.0f, 1.0f, 1.0f,		1.0f, 0.0f, 1.0f,		1.0f, 1.0f, 1.0f,},
 
-		//	// WEST            																			   
-		//	{ 0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 1.0f,},
-		//	{ 0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		1.0f, 0.0f, 1.0f,		1.0f, 1.0f, 1.0f,},
+			// WEST            																			   
+			{ 0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 1.0f,},
+			{ 0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		1.0f, 0.0f, 1.0f,		1.0f, 1.0f, 1.0f,},
 
-		//	// TOP             																			   
-		//	{ 0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,		0.0f, 1.0f, 1.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 1.0f,},
-		//	{ 0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		1.0f, 0.0f, 1.0f,		1.0f, 1.0f, 1.0f,},
+			// TOP             																			   
+			{ 0.0f, 1.0f, 0.0f, 1.0f,    0.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,		0.0f, 1.0f, 1.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 1.0f,},
+			{ 0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 1.0f, 1.0f, 1.0f,    1.0f, 1.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		1.0f, 0.0f, 1.0f,		1.0f, 1.0f, 1.0f,},
 
-		//	// BOTTOM          																			  
-		//	{ 1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 1.0f,},
-		//	{ 1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		1.0f, 0.0f, 1.0f,		1.0f, 1.0f, 1.0f,},
+			// BOTTOM          																			  
+			{ 1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 1.0f,},
+			{ 1.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 0.0f, 1.0f,    1.0f, 0.0f, 0.0f, 1.0f,		0.0f, 1.0f, 1.0f,		1.0f, 0.0f, 1.0f,		1.0f, 1.0f, 1.0f,},
 
-		//};
+		};
 
 		// Load model
 		meshCube.LoadFromObjectFile("Artisan Home1.obj", true);
@@ -664,7 +664,7 @@ public:
 		unsigned width, height;
 
 		//load and decode
-		unsigned error = lodepng::load_file(png, "circle.png");
+		unsigned error = lodepng::load_file(png, "artisanstextures16.png");
 		if (!error) error = lodepng::decode(image, width, height, png);
 
 		//if there's an error, display it
@@ -676,23 +676,26 @@ public:
 		//the pixels are now in the vector "image", 4 bytes per pixel, ordered RGBARGBA..., use it as texture, draw it, ...
 
 		// Go through each pixel and assign it a character and colour in the olcGameEngine
-		int colours[16] = {
-			0x000000, // BLACK
-			0x000080, // DARK BLUE
-			0x008000, // DARK GREEN
-			0x008080, // DARK CYAN
-			0x800000, // DARK RED
-			0x800080, // DARK MAGENTA
-			0x808000, // DARK YELLOW
-			0xc0c0c0, // GREY
-			0x808080, // DARK GREY
-			0x0000ff, // BLUE
-			0x00ff00, // GREEN
-			0x00ffff, // CYAN
-			0xff0000, // RED
-			0xff00ff, // MAGENTA
-			0xffff00, // YELLOW
-			0xffffff, // WHITE
+		struct Colours {
+			short r, g, b, a;
+		};
+		Colours colours[16] = {
+			{0x00, 0x00, 0x00, 0xff}, // BLACK
+			{0x00, 0x00, 0x80, 0xff }, // DARK BLUE
+			{0x00, 0x80, 0x00, 0xff}, // DARK GREEN
+			{0x00, 0x80, 0x80, 0xff}, // DARK CYAN
+			{0x80, 0x00, 0x00, 0xff}, // DARK RED
+			{0x80, 0x00, 0x80, 0xff}, // DARK MAGENTA
+			{0x80, 0x80, 0x00, 0xff}, // DARK YELLOW
+			{0xc0, 0xc0, 0xc0, 0xff}, // GREY
+			{0x80, 0x80, 0x80, 0xff}, // DARK GREY
+			{0x00, 0x00, 0xff, 0xff}, // BLUE
+			{0x00, 0xff, 0x00, 0xff}, // GREEN
+			{0x00, 0xff, 0xff, 0xff}, // CYAN
+			{0xff, 0x00, 0x00, 0xff}, // RED
+			{0xff, 0x00, 0xff, 0xff}, // MAGENTA
+			{0xff, 0xff, 0x00, 0xff}, // YELLOW
+			{0xff, 0xff, 0xff, 0xff}, // WHITE
 		};
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
@@ -704,19 +707,28 @@ public:
 				green += image[ x + (y * 4) + 1 ]; // green
 				blue += image[x + (y * 4) + 2]; // blue
 				alpha += image[x + (y * 4) + 3]; // alpha not used but here anyway
-				pixel = red << 16;
-				pixel += green << 8;
-				pixel += blue;
+				//pixel = red << 16;
+				//pixel += green << 8;
+				//pixel += blue;
 				
 				// Check which colour in the console is closest
 				// by looping through all of the colours and
 				// calculating a difference
-				int minDiff = 0xffffff; // max difference!
+				int minRDiff = 0xffffff; // max difference!
+				int minGDiff = 0xffffff; // max difference!
+				int minBDiff = 0xffffff; // max difference!
+				int minDiff = 0xffffff;
 				for (int i = 0; i < 16; i++) {
-					int currentDiff =  abs(pixel - colours[i]);
-					if (currentDiff < minDiff) {
+					int thisColourR = colours[i].r;
+					int currentRDiff = abs(red - thisColourR);
+					int thisColourG = colours[i].g;
+					int currentGDiff = abs(green - thisColourG);
+					int thisColourB = colours[i].b;
+					int currentBDiff = abs(blue - thisColourB);
+					int overallDiff = currentRDiff * currentGDiff * currentBDiff / 3;
+					if (overallDiff <= minDiff) {
 						c = i;
-						minDiff = currentDiff;
+						minDiff = overallDiff;
 					}
 				}
 
@@ -724,6 +736,8 @@ public:
 				sprTex1->SetGlyph(x, y, PIXEL_SOLID);
 			}
 		}
+
+		// sprTex1 = new olcSprite(L"minijario.spr");
 
 		// Projection Matrix
 		matProj = Matrix_MakeProjection(90.0f, (float)ScreenHeight() / (float)ScreenWidth(), 0.1f, 1000.0f);
