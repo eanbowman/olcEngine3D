@@ -656,7 +656,7 @@ public:
 		};
 
 		// Load model
-		meshCube.LoadFromObjectFile("Artisan Home1.obj", true);
+		//meshCube.LoadFromObjectFile("Artisan Home1.obj", true);
 
 		// Load a sprite from PNG using lodepng
 		std::vector<unsigned char> png;
@@ -664,7 +664,8 @@ public:
 		unsigned width, height;
 
 		//load and decode
-		unsigned error = lodepng::load_file(png, "artisanstextures16.png");
+		//unsigned error = lodepng::load_file(png, "artisanstextures16.png");
+		unsigned error = lodepng::load_file(png, "circle.png");
 		if (!error) error = lodepng::decode(image, width, height, png);
 
 		//if there's an error, display it
@@ -681,7 +682,7 @@ public:
 		};
 		Colours colours[16] = {
 			{0x00, 0x00, 0x00, 0xff}, // BLACK
-			{0x00, 0x00, 0x80, 0xff }, // DARK BLUE
+			{0x00, 0x00, 0x80, 0xff}, // DARK BLUE
 			{0x00, 0x80, 0x00, 0xff}, // DARK GREEN
 			{0x00, 0x80, 0x80, 0xff}, // DARK CYAN
 			{0x80, 0x00, 0x00, 0xff}, // DARK RED
@@ -703,7 +704,7 @@ public:
 				int pixel = 0;
 				unsigned char red = 0, green = 0, blue = 0, alpha = 0;
 				// position times the 4 elements of each pixel
-				int byteoffset = (x * 4) + (y * width);
+				int byteoffset = (y * width + x) * 4;
 				red = image[ byteoffset ]; // red
 				green += image[ byteoffset + 1 ]; // green
 				blue += image[ byteoffset + 2 ]; // blue
