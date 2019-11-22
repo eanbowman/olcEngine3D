@@ -701,15 +701,13 @@ public:
 			for (int x = 0; x < width; x++) {
 				short c = 0;
 				int pixel = 0;
-				short red = 0; short green = 0; short blue = 0; short alpha = 0;
+				unsigned char red = 0, green = 0, blue = 0, alpha = 0;
 				// position times the 4 elements of each pixel
-				red = image[ x + (y * 4) ]; // red
-				green += image[ x + (y * 4) + 1 ]; // green
-				blue += image[x + (y * 4) + 2]; // blue
-				alpha += image[x + (y * 4) + 3]; // alpha not used but here anyway
-				//pixel = red << 16;
-				//pixel += green << 8;
-				//pixel += blue;
+				int byteoffset = (x * 4) + (y * width);
+				red = image[ byteoffset ]; // red
+				green += image[ byteoffset + 1 ]; // green
+				blue += image[ byteoffset + 2 ]; // blue
+				alpha += image[ byteoffset + 3 ]; // alpha not used but here anyway
 				
 				// Check which colour in the console is closest
 				// by looping through all of the colours and
