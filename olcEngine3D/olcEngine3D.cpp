@@ -656,7 +656,7 @@ public:
 		};
 
 		// Load model
-		meshCube.LoadFromObjectFile("Artisan Home1.obj", true);
+		meshCube.LoadFromObjectFile("Artisan Home2.obj", true);
 
 		// Load a sprite from PNG using lodepng
 		std::vector<unsigned char> png;
@@ -664,7 +664,7 @@ public:
 		unsigned width, height;
 
 		//load and decode
-		unsigned error = lodepng::load_file(png, "artisanstextures16.png");
+		unsigned error = lodepng::load_file(png, "artisanstextures64.png");
 		//unsigned error = lodepng::load_file(png, "circle.png");
 		if (!error) error = lodepng::decode(image, width, height, png);
 
