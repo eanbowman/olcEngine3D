@@ -736,7 +736,7 @@ public:
 			}
 		}
 
-		// sprTex1 = new olcSprite(L"minijario.spr");
+		//sprTex1 = new olcSprite(L"sky1.spr");
 
 		// Projection Matrix
 		matProj = Matrix_MakeProjection(90.0f, (float)ScreenHeight() / (float)ScreenWidth(), 0.1f, 1000.0f);
