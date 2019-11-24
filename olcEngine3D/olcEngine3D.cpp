@@ -656,7 +656,7 @@ public:
 		};
 
 		// Load model
-		meshCube.LoadFromObjectFile("Artisan Home2.obj", true);
+		meshCube.LoadFromObjectFile("Artisan Home1.obj", true);
 
 		// Load a sprite from PNG using lodepng
 		std::vector<unsigned char> png;

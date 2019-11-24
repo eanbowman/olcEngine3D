@@ -382,6 +382,7 @@ static long lodepng_filesize(const char* filename) {
 	FILE* file;
 	long size;
 	file = fopen(filename, "rb");
+	char* error = strerror(errno);
 	if (!file) return -1;
 
 	if (fseek(file, 0, SEEK_END) != 0) {
